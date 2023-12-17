@@ -9,7 +9,7 @@ pipeline {
 
     stage('loging') {
       steps {
-        sh 'ls && cat temp.txt'
+        sh 'ls'
       }
     }
 
