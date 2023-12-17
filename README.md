@@ -5,7 +5,7 @@ this is a comprehensive guide to jenkins and installation for students and who e
 ## Prerequisites
 - Linux_server
 
--Docker
+- Docker
 
 - Git
 
