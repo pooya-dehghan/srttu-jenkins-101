@@ -77,7 +77,82 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 docker network create jenkins
 ```
 
+دستور بالا براتون یک نتورک از جنس bridge میسازه که داخل اون باید کانتینر های مربوط به جنکینز رو ران کنین و ازش استفاده کنین.
 
 
 
+ ```shell
+docker run \
+  --name jenkins-docker \
+  --rm \
+  --detach \
+  --privileged \
+  --network jenkins \
+  --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind \
+  --storage-driver overlay2
+```
+
+این دستور براتون یک ایمیج یا تصویر از داکر دی ای ان دی میسازه که شما میتونین داکر رو داخل یک کانتینر داشته باشین !! 
+
+حالا برین یک دایرکتوری که دوست دارین و یک Dockerfile درست کنین و این دستورات رو توش قرار بدین
+ ```shell
+FROM jenkins/jenkins:2.426.2-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+
+بسیار خب الان باید یک ایمیج از این  داکر فایل درست کنیم ....
+
+```shell
+docker build -t myjenkins-blueocean:2.426.2-1 .
+```
+
+با استفاده از این دستور شما میتونین یک ایمیج به قول معروف بیلد کنین !
+
+الان با استفاده از دستور های زیر وضعیت داکر کانتینر ها و ایمیج هارو چک کنین 
+
+```shell
+docker ps
+
+docker images
+```
+الان وقتشه که از روی این ایمیجی که ساختیم یک کانتینر بیاریم بالا و به جنکینز دسترسی پیدا کنیم ! 
+
+
+```shell
+docker run \
+  --name jenkins-blueocean \
+  --restart=on-failure \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.426.2-1
+```
+
+خب الان میتونین به پنل جنکینز خودتون با ادرس سرور و همچنین در پورت 8080 دسترسی داشته باشین
+توجه کنین فقط که باید رمز  رو از مسیر زیر دربیارین :
+
+```shell
+ /var/lib/jenkins/secrets/initialAdminPassword
+```
 
