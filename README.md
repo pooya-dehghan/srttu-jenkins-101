@@ -1,12 +1,12 @@
 # srttu-jenkins-101
 
-this is a comprehensive guide to jenkins and installation for students and who ever is so crazy to have feelings for software.
+این مخزن یک اموزش ابتدایی برای راه اندازی جنکینز روی سرور لینوکسیه ! مختص بچه های شهید رجایی و دانشکده مهندس کامپیوتر ! زنده باد نرم افزار و متن باز !
 
 ## Prerequisites
 - سرور لینوکس
 
-- Docker
+- داکر
 
-- Git
+- گیت و گیت هاب
 
-- Little_bit_of_passion!!
+- مقدار کمی علاقه!
