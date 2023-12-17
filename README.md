@@ -68,5 +68,16 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 حالا با پکیج منیجرتون داکر رو نصب کنین و با دستور -v بالا که بهتون گفتم مطمن بشین که داکر نصب شده !
 
+-جنکینز 
+
+حالا بریم سراغ نصب جنکینز و بالا اوردنش با استفاده از داکر !
+
+
+ ```shell
+docker network create jenkins
+```
+
+
+
 
 
